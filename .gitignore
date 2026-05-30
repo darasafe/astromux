@@ -1,0 +1,15 @@
+# TPM-managed plugin checkouts — never commit
+.tmux/plugins/
+
+# tmux-resurrect / continuum saved session state.
+# These snapshots capture working dirs, command lines, and pane contents —
+# they can leak paths or anything typed into a shell. Keep them out of git.
+.tmux/resurrect/
+resurrect/
+*.resurrect
+tmux_resurrect_*.txt
+
+# logs and any assistant/session sidecar files
+*.log
+*-sessions*.json
+claude-sessions-*.json

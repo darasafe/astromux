@@ -17,7 +17,7 @@ press one key to install plugins, done.
 ## Install
 
 ```sh
-git clone https://github.com/<you>/tmux-config.git
+git clone https://github.com/darasafe/tmux-config.git
 cp tmux-config/.tmux.conf ~/.tmux.conf      # or symlink: ln -s "$PWD/tmux-config/.tmux.conf" ~/.tmux.conf
 tmux                                         # start tmux
 ```

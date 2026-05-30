@@ -1,78 +1,71 @@
-# tmux config
+# astromux
 
-An opinionated, beginner-friendly tmux setup: Catppuccin (Macchiato) theme, a clean
-status bar, vi-style copy mode, and a small curated set of plugins. Copy it, start tmux,
-press one key to install plugins, done.
-
-## Prerequisites
-
-- **tmux ≥ 3.x** — the theme and status-bar format math (`absolute-centre`,
-  `#{e|>=:...}`) need a modern tmux. Check with `tmux -V`.
-- **git** — used to fetch the plugin manager and plugins.
-- **A Nerd Font, set as your terminal font.** The status bar uses icon glyphs
-  (clock, calendar, wifi, battery). Without a patched Nerd Font they render as empty
-  boxes (“tofu”). Grab one from <https://www.nerdfonts.com/> and select it in your
-  terminal settings.
+My tmux setup — and the terminal stack it flies with. Catppuccin Macchiato, a clean
+Nerd Font status bar, vi copy-mode, and a small set of pinned plugins. Copy one file,
+start tmux, press one key.
 
 ## Install
 
 ```sh
-git clone https://github.com/darasafe/tmux-config.git
-cp tmux-config/.tmux.conf ~/.tmux.conf      # or symlink: ln -s "$PWD/tmux-config/.tmux.conf" ~/.tmux.conf
-tmux                                         # start tmux
+git clone https://github.com/darasafe/astromux.git
+cp astromux/.tmux.conf ~/.tmux.conf      # or symlink: ln -s "$PWD/astromux/.tmux.conf" ~/.tmux.conf
+tmux                                      # first start auto-installs TPM + plugins
 ```
 
-On first start, the config bootstraps [TPM](https://github.com/tmux-plugins/tpm)
-(the Tmux Plugin Manager) and installs the plugins automatically. If the bar still
-looks unstyled, install/reload plugins manually and reload the config:
+Inside tmux: `prefix + I` installs plugins, `prefix + r` reloads. **prefix is `Ctrl-b`**
+(tmux default). If the bar looks unstyled, you're missing the Nerd Font — see below.
 
-1. Press **`prefix` then `I`** (capital i) to install plugins.
-2. Press **`prefix` then `r`** to reload the config (or just restart tmux).
+## Match my exact look
 
-> **`prefix` is `Ctrl-b`** in this config (tmux's default — it is not remapped).
-> So "`prefix + I`" means: press `Ctrl-b`, release, then press `Shift-i`.
+The bar theme (**Catppuccin Macchiato**) ships in the config; the rest is terminal-side. To mirror mine:
 
-## Key bindings worth knowing (first-timer cheat-sheet)
+- **Terminal:** Windows Terminal.
+- **Font: Hack Nerd Font** — install it from [nerdfonts.com](https://www.nerdfonts.com/font-downloads),
+  then *Settings → your WSL/Ubuntu profile → Appearance → Font face → `Hack Nerd Font`*. Without a
+  Nerd Font the status glyphs (clock, calendar, wifi, battery) render as empty boxes.
+- **Background:** set the profile background to `#171421` (*Appearance → Background*).
+- **tmux ≥ 3.x** required (catppuccin v2, `absolute-centre`). Check with `tmux -V`.
+
+## Keys worth knowing
 
 | Action | Keys |
 | --- | --- |
-| Reload this config | `prefix` `r` |
-| Move between panes | `prefix` `h` / `j` / `k` / `l` |
-| Enter scrollback / copy mode | `prefix` `[` (then `q` to quit) |
-| Start selection / select line / yank | `v` / `V` / `y` (in copy mode) |
-| Resize panes | `Alt-h/j/k/l` (smart-splits) |
-| Open file picker popup | `prefix` `Ctrl-f` |
-| Scroll up into copy mode | `PageUp` |
+| Reload config | `prefix` `r` |
+| Move between panes | `prefix` `h/j/k/l` |
+| Resize panes | `Alt-h/j/k/l` |
+| Copy mode (scrollback) | `prefix` `[` → `v` select, `y` yank, `q` quit |
+| File-picker popup | `prefix` `Ctrl-f` |
+| Install plugins | `prefix` `I` |
 
-Everything else (new window `prefix c`, split is via panes, detach `prefix d`, etc.)
-is stock tmux — the [tmux man page](https://man7.org/linux/man-pages/man1/tmux.1.html)
-or any "tmux cheat sheet" covers the basics.
+`Alt`-resize needs the Neovim half (`smart-splits.nvim`) for seamless nvim↔tmux nav; `prefix+Ctrl-f`
+needs a `tmux-file-picker` binary on `PATH`. Both no-op if absent.
+
+## The wider setup it pairs with
+
+The tmux config stands alone, but it's one piece of a Catppuccin-Macchiato terminal. Optional companions:
+
+| Tool | Role |
+| --- | --- |
+| **Catppuccin Macchiato** | one theme across tmux, lazygit/delta, bat |
+| **Starship** | cross-shell prompt (zsh) |
+| **eza · bat · fd · ripgrep** | modern `ls` / `cat` / `find` / `grep` |
+| **fzf · zoxide** | fuzzy finder + smart `cd` |
+| **lazygit + delta** | git TUI with themed diffs |
+| **tmux-resurrect + continuum** | save/restore sessions across reboots |
+| **chezmoi** | manages all of it as dotfiles |
 
 ## Plugins (pinned)
 
-Versions are pinned to upstream tags for reproducible installs. Bump them deliberately.
-
-- `tmux-plugins/tpm` — plugin manager
-- `catppuccin/tmux` — theme
-- `tmux-plugins/tmux-battery`, `tmux-online-status` — status-bar widgets
-- `tmux-plugins/tmux-resurrect`, `tmux-continuum` — save/restore sessions
-
-Two bindings depend on extra tooling and simply do nothing if it is absent:
-
-- **`Alt-h/j/k/l` resize** is provided by the tmux side of
-  `mrjones2014/smart-splits.nvim`; the seamless nvim↔tmux navigation half only
-  matters if you use Neovim with that plugin.
-- **`prefix + Ctrl-f`** needs a `tmux-file-picker` binary on your `PATH`.
+Pinned to upstream tags for reproducible installs (tags are mutable — reproducible, not
+commit-immutable): tpm · catppuccin/tmux · tmux-battery · tmux-online-status ·
+tmux-resurrect · tmux-continuum · smart-splits.nvim.
 
 ## Notes
 
-- **First launch downloads and runs third-party code.** On first start the config
-  clones TPM and the pinned plugins from GitHub and executes them inside tmux. Versions
-  are pinned to upstream tags; tags are mutable, so this is reproducible but not
-  commit-immutable. Skim the plugin list above before installing if that matters to you.
-- **Session auto-restore is on** (`@continuum-restore 'on'`): tmux tries to restore a
-  previous session on launch. Comment that line out in `~/.tmux.conf` if you'd rather
-  start fresh each time.
-- Resurrect/continuum save state under `~/.tmux/resurrect/`. That state can contain
-  your working directories and command history — it is gitignored here and should
-  never be committed anywhere public.
+- **First launch downloads and runs third-party plugin code** from GitHub (standard TPM) — skim the list above first if that matters to you.
+- **Session auto-restore is on** (`@continuum-restore`); comment it out in `~/.tmux.conf` to start fresh each time.
+- Resurrect state under `~/.tmux/resurrect/` can hold working dirs and command history — gitignored here; never commit it publicly.
+
+## License
+
+[MIT](LICENSE).
